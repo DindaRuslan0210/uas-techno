@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>EduTask | Kalender Akademik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">🎓 EduTask</div>
+    <div class="nav-menu">
+        <a href="index.html">Beranda</a>
+        <a href="dashboar.html">Dashboard</a>
+        <a href="kalender.html" class="active">Kalender</a>
+        <a href="progres.html">Progres</a>
+        <li><a href="tentang.html">tentang</a></li>
+        <a href="kontak.html" class="active">Kontak</a>
+
+    </div>
+       <a href="#" class="btn-primary">Dinda Aidiyah Ruslan</a>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="card">
+
+        <div class="calendar-header">
+            <h2>Kalender Akademik</h2>
+            <div class="month-nav">Januari 2026</div>
+        </div>
+
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th>MIN</th>
+                    <th>SEN</th>
+                    <th>SEL</th>
+                    <th>RAB</th>
+                    <th>KAM</th>
+                    <th>JUM</th>
+                    <th>SAB</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td><td></td><td></td><td></td>
+                    <td><div class="date" data-date="2026-01-01">1</div></td>
+                    <td><div class="date" data-date="2026-01-02">2</div></td>
+                    <td><div class="date" data-date="2026-01-03">3</div></td>
+                </tr>
+                <tr>
+                    <td><div class="date today" data-date="2026-01-04">4</div></td>
+                    <td><div class="date" data-date="2026-01-05">5</div></td>
+                    <td><div class="date" data-date="2026-01-06">6</div></td>
+                    <td><div class="date" data-date="2026-01-07">7</div></td>
+                    <td><div class="date" data-date="2026-01-08">8</div></td>
+                    <td><div class="date" data-date="2026-01-09">9</div></td>
+                    <td><div class="date" data-date="2026-01-10">10</div></td>
+                </tr>
+                <tr>
+                    <td><div class="date" data-date="2026-01-11">11</div></td>
+                    <td><div class="date" data-date="2026-01-12">12</div></td>
+                    <td><div class="date" data-date="2026-01-13">13</div></td>
+                    <td><div class="date" data-date="2026-01-14">14</div></td>
+                    <td><div class="date" data-date="2026-01-15">15</div></td>
+                    <td><div class="date" data-date="2026-01-16">16</div></td>
+                    <td><div class="date" data-date="2026-01-17">17</div></td>
+                </tr>
+                <tr>
+                    <td><div class="date" data-date="2026-01-18">18</div></td>
+                    <td><div class="date" data-date="2026-01-19">19</div></td>
+                    <td><div class="date" data-date="2026-01-20">20</div></td>
+                    <td><div class="date" data-date="2026-01-21">21</div></td>
+                    <td><div class="date" data-date="2026-01-22">22</div></td>
+                    <td><div class="date" data-date="2026-01-23">23</div></td>
+                    <td><div class="date" data-date="2026-01-24">24</div></td>
+                </tr>
+                <tr>
+                    <td><div class="date" data-date="2026-01-25">25</div></td>
+                    <td><div class="date" data-date="2026-01-26">26</div></td>
+                    <td><div class="date" data-date="2026-01-27">27</div></td>
+                    <td><div class="date" data-date="2026-01-28">28</div></td>
+                    <td><div class="date" data-date="2026-01-29">29</div></td>
+                    <td><div class="date" data-date="2026-01-30">30</div></td>
+                    <td><div class="date" data-date="2026-01-31">31</div></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function renderCalendar(){
+    document.querySelectorAll(".event").forEach(e => e.remove());
+
+    document.querySelectorAll(".date[data-date]").forEach(dateDiv => {
+        const date = dateDiv.dataset.date;
+        const dayTasks = tasks.filter(t => t.deadline === date);
+
+        dayTasks.forEach(task => {
+            const event = document.createElement("div");
+            event.className = "event" + (task.done ? " done" : "");
+            event.innerText = task.title;
+            dateDiv.parentElement.appendChild(event);
+        });
+    });
+}
+
+renderCalendar();
+</script>
+
+</body>
+</html>

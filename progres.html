@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Progres | EduTask</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">🎓 EduTask</div>
+    <div class="menu">
+        <a href="index.html">Beranda</a>
+        <a href="dashboar.html">Dashboard</a>
+        <a href="kalender.html">Kalender</a>
+        <a href="progres.html" class="active">Progres</a>
+        <li><a href="tentang.html">tentang</a></li>
+        <a href="kontak.html" class="active">Kontak</a>
+
+    </div>
+    <a href="#" class="btn-primary">Dinda Aidiyah Ruslan</a>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="dashboard">
+
+        <!-- PIE CHART -->
+        <div class="card">
+            <h3>Distribusi Mata Kuliah</h3>
+            <canvas id="matkulChart"></canvas>
+        </div>
+
+        <!-- BAR CHART -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Efisiensi Belajar</h3>
+                <span class="badge">Mingguan</span>
+            </div>
+            <canvas id="efisiensiChart"></canvas>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* ===============================
+   AMBIL DATA DARI DASHBOARD
+================================= */
+const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+console.log("DATA TASKS:", tasks);
+
+/* ===============================
+   PIE CHART – DISTRIBUSI MATA KULIAH
+================================= */
+const matkulMap = {};
+
+tasks.forEach(t => {
+    if (t.course) {
+        const nama = t.course.trim().toUpperCase();
+        matkulMap[nama] = (matkulMap[nama] || 0) + 1;
+    }
+});
+
+new Chart(document.getElementById("matkulChart"), {
+    type: "pie",
+    data: {
+        labels: Object.keys(matkulMap),
+        datasets: [{
+            data: Object.values(matkulMap),
+            backgroundColor: [
+                "#4f46e5",
+                "#6366f1",
+                "#818cf8",
+                "#a5b4fc",
+                "#c7d2fe"
+            ]
+        }]
+    },
+    options: {
+        plugins: {
+            legend: { position: "bottom" }
+        }
+    }
+});
+
+/* ===============================
+   BAR CHART – TUGAS SELESAI PER HARI
+================================= */
+function getHari(dateStr) {
+    const hari = ["Min","Sen","Sel","Rab","Kam","Jum","Sab"];
+    return hari[new Date(dateStr).getDay()];
+}
+
+const hariList = ["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+const selesai = {
+    Sen:0, Sel:0, Rab:0, Kam:0, Jum:0, Sab:0, Min:0
+};
+
+tasks.forEach(t => {
+    if (t.done && t.deadline) {
+        selesai[getHari(t.deadline)]++;
+    }
+});
+
+new Chart(document.getElementById("efisiensiChart"), {
+    type: "bar",
+    data: {
+        labels: hariList,
+        datasets: [{
+            label: "Tugas Selesai",
+            data: hariList.map(h => selesai[h]),
+            backgroundColor: "#4f46e5",
+            borderRadius: 8
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1 }
+            }
+        }
+    }
+});
+</script>
+
+</body>
+</html>
